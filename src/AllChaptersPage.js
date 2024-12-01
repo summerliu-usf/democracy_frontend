@@ -6,6 +6,9 @@ const AllChaptersPage = () => {
     const { bookId } = useParams(); // Extract the bookId from the route
     const [chapters, setChapters] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [message, setMessage] = useState("");
+    const [response, setResponse] = useState("");
+    const { chapterId } = useParams();
 
     useEffect(() => {
         // Fetch chapters for the given bookId

@@ -11,7 +11,7 @@ const App = () => {
   // Fetch all books from the backend
   useEffect(() => {
     axios
-        .get("/books") // fix axios call 
+        .get("/books") // fix axios call
         .then((response) => {
           setBooks(response.data);
         })
@@ -58,7 +58,8 @@ const MainApp = () => (
     <Router>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/chapters/:bookId" element={<AllChaptersPage />} />
+        <Route path="/:bookId/chapters" element={<AllChaptersPage />} />
+          <Route path="/chapters/:chapterId/" element={<ChapterPage />} />
       </Routes>
     </Router>
 );
