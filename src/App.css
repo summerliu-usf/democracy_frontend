@@ -1,38 +1,224 @@
-.App {
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Courier New", Tahoma, sans-serif;
+  color: #333;
+  background-color: #f4f6f9;
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+  height: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+a:hover {
+  color: #0056b3;
+}
+
+/* App container */
+.app-container {
+  display: flex;
+  height: auto; /* Adjust height based on content */
+  flex: 1;
+  flex-direction: row;
+}
+
+/* Navigation bar */
+.navbar {
+  width: 250px;
+  position: fixed;
+  height: 100%;
+  flex-shrink: 0;
+  background-color: #343a40;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 10; /* Ensures navbar stays above content */
+}
+
+.navbar h2 {
+  margin: 0 0 20px;
+  font-size: 1.5rem;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.navbar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.navbar li {
+  margin: 10px 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.navbar a {
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  display: block;
+  text-align: center;
+  font-weight: bold;
+  background-color: transparent;
+}
+
+.navbar a:hover {
+  background-color: #495057;
+}
+
+/* Main content */
+.main-content {
+  flex: 1;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: calc(100% - 250px);
+  margin-left: 250px; /* Offset content by navbar width */
+  z-index: 1; /* Ensure it doesn't overlap the navbar */
+}
+
+.main-content h1 {
+  margin-bottom: 20px;
+  font-size: 3rem;
+}
+
+.books-container {
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 5%;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  padding: 5vh;
 }
 
-.App-link {
-  color: #61dafb;
+/* Book card */
+.book-card {
+  flex: 1 1 20%; /* Ensures cards adjust responsively */
+  max-width: 30vw;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.book-card img {
+  width: 100%; /* Fully responsive width */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: cover; /* Ensure the image fits nicely */
+}
+
+.book-card h3 {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.book-card p {
+  font-size: 0.9rem;
+  padding: 0 10px;
+  margin: 0 0 10px;
+}
+
+button {
+  background-color: #6b66b8;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  width: 80%;
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 0 0 8px 8px;
+}
+
+.book-card button:hover {
+  background-color: #718aef;
+}
+
+/* Responsive Book Card Adjustments */
+@media (max-width: 768px) {
+  .book-card {
+    flex: 1 1 100%; /* Stack cards on smaller screens */
+    max-width: 100%;
   }
-  to {
-    transform: rotate(360deg);
+}
+
+/* Chat section */
+.chat-section {
+  margin-top: 30px;
+  width: 50%;
+  max-width: calc(100% - 250px);
+  margin-left: auto;
+  margin-right: auto;
+  position: relative; /* Ensure it stacks properly */
+  z-index: 5; /* Prevents being obscured by the navbar */
+  background-color: #fff; /* Optional for better visibility */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.chat-section textarea {
+  width: 100%;
+  height: 100px;
+  border: none; /* Remove border for a clean look */
+  font-size: 1rem;
+  padding: 10px;
+  resize: none;
+  background-color: #f4f4f9; /* Match the page background */
+  color: #333;
+  box-shadow: none;
+  outline: none;
+}
+
+.chat-section button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.chat-section button:hover {
+  background-color: #0056b3;
+}
+
+/* Footer */
+.footer {
+  margin-top: auto;
+  text-align: center;
+  padding: 10px 0;
+  background-color: #343a40;
+  color: #fff;
+  width: 100%;
+  position: sticky; /* Keep footer at the bottom */
+  bottom: 0;
+  z-index: 1; /* Prevents being covered by other elements */
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px; /* Smaller font size for tablets */
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  p {
+    font-size: 0.8rem;
   }
 }

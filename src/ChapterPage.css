@@ -1,0 +1,140 @@
+body {
+  margin: auto;
+  padding: 0;
+  font-family: "Courier New", Tahoma, sans-serif;
+  color: #333;
+  background-color: #f4f4f9;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  height: 100%;
+}
+
+.navbar {
+  width: 250px;
+  position: fixed;
+  height: 100%;
+  flex-shrink: 0;
+  background-color: #343a40;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 10; /* Ensures navbar stays above content */
+}
+
+.navbar h2 {
+  margin: 0 0 20px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.navbar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.navbar li {
+  margin: 10px 0;
+}
+
+.navbar a {
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  display: block;
+  text-align: center;
+  font-weight: bold;
+  background-color: transparent;
+  margin: 0;
+}
+
+.navbar a:hover {
+  background-color: #495057;
+}
+
+h1 {
+  font-size: 3rem;
+  text-align: center;
+}
+
+.center-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers content horizontally */
+  justify-content: center; /* Centers content vertically */
+  height: 100vh; /* Ensures the div takes up the full viewport height */
+  width: 100%; /* Ensures the div takes up the full width */
+  background-color: #f4f4f9; /* Optional for visibility */
+  margin-left: 100px;
+  padding: 40px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+button {
+  padding: 10px 20px; /* Add space inside the button */
+  background-color: #6b66b8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: auto; /* Ensure the button size is dynamic */
+  text-align: center;
+}
+
+.podcast-player button:hover {
+  background-color: #718aef;
+}
+
+.podcast-player input[type="range"] {
+  width: 100%; /* Make the slider responsive */
+  max-width: 400px; /* Set a maximum width for the slider */
+  margin: 10px 0; /* Add margin around the slider */
+}
+
+textarea {
+  width: 100%;
+  max-width: 500px;
+  height: 100px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.chat-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the section content */
+  margin-top: 30px;
+  width: 100%;
+}
+
+.chat-section button {
+  padding: 10px 20px; /* Add space inside the button */
+  background-color: #6b66b8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.chat-section button:hover {
+  background-color: #718aef;
+}
+
+hr {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px 0;
+  border: none;
+  border-top: 1px solid #ddd;
+}

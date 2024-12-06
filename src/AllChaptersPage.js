@@ -1,48 +1,67 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import "./App.css";
 
 const AllChaptersPage = () => {
-    const { bookId } = useParams(); // Extract the bookId from the route
+    const { bookId } = useParams(); // Get bookId from the URL
     const [chapters, setChapters] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [message, setMessage] = useState("");
-    const [response, setResponse] = useState("");
-    const { chapterId } = useParams();
 
+    // Set chapters only once based on bookId
     useEffect(() => {
-        // Fetch chapters for the given bookId
-        axios
-            .get(`/books/${bookId}/chapters`) // fix axios call
-            .then((response) => {
-                setChapters(response.data); // Set chapters as a list of Chapter objects
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error fetching chapters:", error);
-                setLoading(false);
-            });
+        if (bookId === "TOTM") {
+            setChapters([
+                { id: "1", title: "Fear of Losing" },
+                { id: "2", title: "The Banality of Authoritarianism" },
+                { id: "3", title: "It Has Happened Here" },
+                { id: "4", title: "Why the Republican Party Abandoned Democracy" },
+                { id: "5", title: "Fettered Majorities" },
+                { id: "6", title: "Minority Rule" },
+                { id: "7", title: "America the Outlier" },
+                { id: "8", title: "Democratizing Our Democracy" },
+            ]);
+        } else if (bookId === "HDD") {
+            setChapters([
+                { id: "1", title: "Fateful Alliances" },
+                { id: "2", title: "Gatekeeping in America" },
+                { id: "3", title: "The Great Republican Abdication" },
+                { id: "4", title: "Subverting Democracy" },
+                { id: "5", title: "The Guardrails of Democracy" },
+                { id: "6", title: "The Unwritten Rules of American Politics" },
+                { id: "7", title: "The Unraveling" },
+                { id: "8", title: "Trump Against the Guardrails" },
+                { id: "9", title: "Saving Democracy" },
+            ]);
+        } else {
+            setChapters([]);
+        }
     }, [bookId]);
 
-    if (loading) {
-        return <p>Loading chapters...</p>;
-    }
-
     return (
-        <div style={{ padding: "20px" }}>
-            <h2>Chapters for Book {bookId}</h2>
-            <ul style={{ listStyleType: "none", padding: 0 }}>
+        <div style={{ padding: "20px", margin: "2vh"}}>
+            <h1>
+                {bookId === "TOTM"
+                    ? "Tyranny of the Minority"
+                    : "How Democracies Die"}
+            </h1>
+            <ul style={{ listStyleType: "none", padding: 0, color: "black" }}>
                 {chapters.map((chapter) => (
-                    <li key={chapter.id} style={{ marginBottom: "20px" }}>
-                        <h3>{chapter.title}</h3>
-                        {chapter.podcastUrl && (
-                            <p>
-                                <a href={chapter.podcastUrl} target="_blank" rel="noopener noreferrer">
-                                    Listen to Podcast
-                                </a>
-                            </p>
-                        )}
-                        <p>Book ID: {chapter.bookId}</p>
+                    <li
+                        key={chapter.id}
+                        style={{
+                            marginBottom: "10px",
+                            fontSize: "1.2rem",
+                            color: "black",
+                        }}
+                    >
+                        <Link
+                            to={`${chapter.id}`}
+                            style={{
+                                textDecoration: "none",
+                                color: "black",
+                            }}
+                        >
+                            Chapter {chapter.id}: {chapter.title}
+                        </Link>
                     </li>
                 ))}
             </ul>
