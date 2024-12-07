@@ -3,23 +3,17 @@ import axios from "axios";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
-import Book from "./Book";
 import AllChaptersPage from "./AllChaptersPage";
 import ChapterPage from "./ChapterPage";
+import LoginForm from './LoginForm';
+
 
 const App = () => {
-    // const [books, setBooks] = useState([]);
-    //
-    // useEffect(() => {
-    //     axios
-    //         .get("/books")
-    //         .then((response) => {
-    //             setBooks(response.data);
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error fetching books:", error);
-    //         });
-    // }, []);
+
+    function HandleLogin(userId) {
+        setUserId(userId);
+        console.log('Logged in user:', userId);
+    }
     const hardcodedBooks = [
         {
             id: "HDD",
@@ -39,6 +33,7 @@ const App = () => {
     const [books, setBooks] = useState(hardcodedBooks);
     const navigate = useNavigate();
     const [input, setInput] = useState("");
+    const [userId, setUserId] = useState(null);
 
     // Navigate to chapters page for a specific book
     const handleViewChapters = (bookId) => {
@@ -66,6 +61,7 @@ const App = () => {
 
     return (
         <div className="app-container">
+            <LoginForm LoginEvent={HandleLogin} />
             {/* Navigation Bar */}
             <nav className="navbar">
                 <h2>The Democracy Library</h2>

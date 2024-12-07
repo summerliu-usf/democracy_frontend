@@ -10,22 +10,31 @@ function ChapterPage() {
     const { bookId, chapterId } = useParams();
     console.log({ bookId, chapterId });
     const [chapterDetails, setChapterDetails] = useState(null);
-
-
+    const [bookTitle, setBookTitle] = useState("");
     const [message, setMessage] = useState("");
     const [response, setResponse] = useState("");
     const [question, setQuestion] = useState("");
     const [showAnswer, setShowAnswer] = useState(false);
     const [answer, setAnswer] = useState("");
 
+    function getBookTitle() {
+        console.log("Determining book title...");
+        if (bookId === "TOTM") {
+            setBookTitle("Tyranny of the Minority");
+        } else {
+            setBookTitle("How Democracies Die");
+        }
+        console.log("Book title set to:", bookId === "TOTM" ? "Tyranny of the Minority" : "How Democracies Die");
+    }
 
     function fetchChapterDetails() {
+        console.log("Fetching chapter details...");
         setLoading(true);
         axios
             .get(`https://democracybackend.wl.r.appspot.com/${bookId}/chapters/${chapterId}`)
             .then((response) => {
+                console.log("Chapter details fetched successfully:", response.data);
                 setChapterDetails(response.data);
-                console.log(chapterDetails);
                 setLoading(false);
             })
             .catch((error) => {
@@ -36,40 +45,23 @@ function ChapterPage() {
     }
 
     useEffect(() => {
+        console.log("useEffect triggered with bookId:", bookId, "and chapterId:", chapterId);
         fetchChapterDetails();
+        getBookTitle();
     }, [bookId, chapterId]);
 
-
-    // const handleSendMessage = async () => {
-    //     try {
-    //         const res = await axios.post("https://api.openai.com/v1/chat/completions", {
-    //             model: "gpt-4",
-    //             messages: [
-    //                 { role: "system", content: `You are an assistant analyzing chapter ${chapterId} of the provided book.` },
-    //                 { role: "user", content: message },
-    //             ],
-    //             assistant_id: 'asst_JOt4R77V9iQdKseN5qnAj70G',
-    //         }, {
-    //             headers: { Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
-    //                 "Content-Type": "application/json"},
-    //         });
-    //
-    //         setResponse(res.data.choices[0].message.content);
-    //     } catch (error) {
-    //         console.error("Error sending message to OpenAI:", error);
-    //     }
-    // };
     const handleSendMessage = () => {
+        console.log("Sending message to OpenAI...");
+        setError(null);
         axios
             .post(
                 "https://api.openai.com/v1/chat/completions",
                 {
                     model: "gpt-4",
                     messages: [
-                        { role: "system", content: `You are an assistant analyzing chapter ${chapterId} of the provided book.` },
+                        { role: "system", content: `You are an assistant analyzing chapter ${chapterId} of the book ${bookTitle}.` },
                         { role: "user", content: message },
                     ],
-                    assistant_id: 'asst_JOt4R77V9iQdKseN5qnAj70G',
                 },
                 {
                     headers: {
@@ -79,56 +71,27 @@ function ChapterPage() {
                 }
             )
             .then((res) => {
-                setResponse(res.data.choices[0].message.content);
+                console.log("OpenAI response received:", res.data);
+                setResponse(res.data.choices[0]?.message?.content || "No response content received.");
             })
             .catch((error) => {
-                console.error("Error sending message to OpenAI:", error);
+                console.error("Error sending message to OpenAI:", error.response || error.message);
+                setError("Failed to get a response from OpenAI. Check logs for details.");
             });
     };
 
-    //
-    // const handleGenerateQuestion = async () => {
-    //     try {
-    //         const res = await axios.post("https://api.openai.com/v1/chat/completions", {
-    //             model: "gpt-4",
-    //             messages: [
-    //                 { role: "system", content: `You are an assistant analyzing chapter ${chapterId} of the provided book.` },
-    //                 { role: "user", content: `Generate a thought-provoking question about chapter ${chapterId} in the book.` },
-    //             ],
-    //             assistant_id: chapterDetails.assistantId,
-    //         }, {
-    //             headers: { Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}` },
-    //         });
-    //
-    //         setQuestion(res.data.choices[0].message.content);
-    //
-    //         const answerRes = await axios.post("https://api.openai.com/v1/chat/completions", {
-    //             model: "gpt-4",
-    //             messages: [
-    //                 { role: "system", content: `You are an assistant analyzing chapter ${chapterId} of the provided book.` },
-    //                 { role: "user", content: `Provide the answer to the following question: ${res.data.choices[0].message.content}` },
-    //             ],
-    //             assistant_id: chapterDetails.assistantId,
-    //         }, {
-    //             headers: { Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}` },
-    //         });
-    //
-    //         setAnswer(answerRes.data.choices[0].message.content);
-    //     } catch (error) {
-    //         console.error("Error generating question/answer with OpenAI:", error);
-    //     }
-    // };
     const handleGenerateQuestion = () => {
+        console.log("Generating question and answer with OpenAI...");
+        setError(null);
         axios
             .post(
                 "https://api.openai.com/v1/chat/completions",
                 {
-                    model: "gpt-4",
+                    model: "gpt-4o-mini",
                     messages: [
-                        { role: "system", content: `You are an assistant analyzing chapter ${chapterId} of the provided book.` },
-                        { role: "user", content: `Generate a thought-provoking question about chapter ${chapterId} in the book.` },
+                        { role: "system", content: `You are an assistant analyzing chapter ${chapterId} of the book ${bookTitle}.` },
+                        { role: "user", content: `Generate a thought-provoking question about chapter ${chapterId} in the book ${bookTitle}.` },
                     ],
-                    assistant_id: chapterDetails.assistantId,
                 },
                 {
                     headers: {
@@ -138,16 +101,16 @@ function ChapterPage() {
                 }
             )
             .then((res) => {
-                setQuestion(res.data.choices[0].message.content);
+                console.log("Generated question:", res.data);
+                setQuestion(res.data.choices[0]?.message?.content || "No question generated.");
                 return axios.post(
                     "https://api.openai.com/v1/chat/completions",
                     {
-                        model: "gpt-4",
+                        model: "gpt-4o-mini",
                         messages: [
-                            { role: "system", content: `You are an assistant analyzing chapter ${chapterId} of the provided book.` },
-                            { role: "user", content: `Provide the answer to the following question: ${res.data.choices[0].message.content}` },
+                            { role: "system", content: `You are an assistant analyzing chapter ${chapterId} of the book ${bookTitle}.` },
+                            { role: "user", content: `Provide the answer to the following question based on book content: ${res.data.choices[0].message.content}` },
                         ],
-                        assistant_id: chapterDetails.assistantId,
                     },
                     {
                         headers: {
@@ -158,55 +121,64 @@ function ChapterPage() {
                 );
             })
             .then((answerRes) => {
-                setAnswer(answerRes.data.choices[0].message.content);
+                console.log("Generated answer:", answerRes.data);
+                setAnswer(answerRes.data.choices[0]?.message?.content || "No answer generated.");
             })
             .catch((error) => {
-                console.error("Error generating question/answer with OpenAI:", error);
+                console.error("Error generating question/answer with OpenAI:", error.response || error.message);
+                setError("Failed to generate question or answer. Check logs for details.");
             });
     };
-
 
     const toggleShowAnswer = () => {
         setShowAnswer(!showAnswer);
     };
 
     if (!chapterDetails) {
+        console.log("No chapter details available yet.");
         return <p>Loading chapter details...</p>;
     }
 
     return (
-        <div style={{margin: "0", padding: "0"}}>
+        <div style={{ margin: "0", padding: "0" }}>
             <div>
-            <nav className="navbar">
-                <h2>The Democracy Library</h2>
-                <ul>
-                    <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                </ul>
-            </nav></div>
+                <nav className="navbar">
+                    <h2>The Democracy Library</h2>
+                    <ul>
+                        <li>
+                            <Link to="/">Home</Link>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
             <div className="center-div">
                 <h1>{chapterDetails.title}</h1>
-                <hr></hr>
+                <hr />
                 <h2>Notebook LM Generated Podcast</h2>
                 <p>Listen to a podcast on this chapter generated by Notebook LM's AIs!</p>
                 <p>(Links to external website)</p>
                 {chapterDetails.podcastUrl ? (
-                    <div style={{
-                        border: "1px solid #ccc",
-                        padding: "16px",
-                        borderRadius: "8px",
-                        backgroundColor: "#f9f9f9"
-                    }}>
-                        <a href={chapterDetails.podcastUrl} target="_blank" rel="noopener noreferrer"
-                           style={{ textDecoration: "none", color: "#007BFF", fontWeight: "bold" }}>
+                    <div
+                        style={{
+                            border: "1px solid #ccc",
+                            padding: "16px",
+                            borderRadius: "8px",
+                            backgroundColor: "#f9f9f9",
+                        }}
+                    >
+                        <a
+                            href={chapterDetails.podcastUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ textDecoration: "none", color: "#007BFF", fontWeight: "bold" }}
+                        >
                             Listen to the Podcast
                         </a>
                     </div>
                 ) : (
                     <p>Loading podcast URL...</p>
                 )}
-                <hr></hr>
+                <hr />
                 <h2>Chat about this chapter</h2>
                 <textarea
                     value={message}
@@ -230,7 +202,9 @@ function ChapterPage() {
                 </div>
 
                 <h2>Generate a Question</h2>
-                <button onClick={handleGenerateQuestion} style={{ margin: "20px"}}>Generate Question</button>
+                <button onClick={handleGenerateQuestion} style={{ margin: "20px" }}>
+                    Generate Question
+                </button>
                 {question && (
                     <div style={{ marginTop: "20px" }}>
                         <p style={{ whiteSpace: "pre-wrap" }}>
